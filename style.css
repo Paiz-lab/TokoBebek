@@ -1,0 +1,120 @@
+/* Custom Styles */
+* {
+    scroll-behavior: smooth;
+}
+
+.nav-link {
+    @apply text-gray-700 hover:text-primary font-medium transition-colors;
+}
+
+.btn-primary {
+    @apply bg-white text-primary px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-all inline-flex items-center shadow-md;
+}
+
+.btn-secondary {
+    @apply bg-transparent border-2 border-white text-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary transition-all inline-flex items-center;
+}
+
+.btn-whatsapp {
+    @apply bg-green-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-600 transition-all inline-flex items-center justify-center shadow-md;
+}
+
+.wave-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.wave-bottom svg {
+    position: relative;
+    display: block;
+    width: calc(100% + 1.3px);
+    height: 60px;
+}
+
+.wave-bottom .shape-fill {
+    fill: #f9fafb;
+}
+
+.product-card {
+    @apply bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1;
+}
+
+.product-image {
+    @apply w-full h-48 object-cover;
+}
+
+.stat-card {
+    @apply bg-light-green p-6 rounded-lg text-center hover:shadow-md transition-shadow;
+}
+
+.whatsapp-float {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #25D366;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.4);
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(37, 211, 102, 0.6);
+}
+
+.badge-stock {
+    @apply inline-block px-3 py-1 text-xs font-semibold rounded-full;
+}
+
+.badge-available {
+    @apply bg-green-100 text-green-800;
+}
+
+.badge-limited {
+    @apply bg-yellow-100 text-yellow-800;
+}
+
+.badge-out {
+    @apply bg-red-100 text-red-800;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .whatsapp-float {
+        bottom: 20px;
+        right: 20px;
+        width: 50px;
+        height: 50px;
+    }
+    
+    .whatsapp-float i {
+        font-size: 24px;
+    }
+}
