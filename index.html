@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BBQ – Toko Bebek & Telur Terpercaya</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --cream: #fdf6ec;
+      --gold: #c9a84c;
+      --gold-light: #f0d080;
+      --dark: #1a1208;
+      --brown: #5c3d1e;
+    }
+    body { font-family: 'Inter', sans-serif; background: var(--cream); color: var(--dark); }
+    .font-display { font-family: 'Playfair Display', serif; }
+    html { scroll-behavior: smooth; }
+
+    @keyframes fadeUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes slideDown { from { opacity:0; transform:translateY(-60px); } to { opacity:1; transform:translateY(0); } }
+    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+    @keyframes shimmer { 0%{background-position:-200% center} 100%{background-position:200% center} }
+    @keyframes modalIn { from{opacity:0;transform:scale(0.93)} to{opacity:1;transform:scale(1)} }
+
+    .anim-nav { animation: slideDown .5s ease-out both; }
+    .anim-hero { animation: fadeUp .8s ease-out both; }
+    .anim-hero-2 { animation: fadeUp .8s .2s ease-out both; }
+    .anim-hero-3 { animation: fadeUp .8s .4s ease-out both; }
+    .anim-float { animation: float 3.5s ease-in-out infinite; }
+
+    .scroll-reveal { opacity:0; transform:translateY(35px); transition: opacity .65s ease, transform .65s ease; }
+    .scroll-reveal.visible { opacity:1; transform:translateY(0); }
+    .stagger-1{transition-delay:.05s} .stagger-2{transition-delay:.15s}
+    .stagger-3{transition-delay:.25s} .stagger-4{transition-delay:.35s}
+
+    .gold-btn {
+      background: linear-gradient(135deg, #c9a84c, #f0d080, #c9a84c);
+      background-size: 200% auto;
+      transition: background-position .4s ease, transform .15s ease, box-shadow .2s ease;
+    }
+    .gold-btn:hover { background-position: right center; transform: scale(1.04); box-shadow: 0 8px 30px rgba(201,168,76,.45); }
+    .gold-btn:active { transform: scale(0.97); }
+
+    .card-product { transition: transform .3s ease, box-shadow .3s ease; }
+    .card-product:hover { transform: translateY(-6px); box-shadow: 0 20px 50px rgba(92,61,30,.18); }
+
+    .navbar-scrolled { box-shadow: 0 2px 24px rgba(26,18,8,.18); }
+    .mobile-menu { max-height:0; overflow:hidden; transition:max-height .4s ease; }
+    .mobile-menu.open { max-height:400px; }
+
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(26,18,8,.65); z-index:200; align-items:center; justify-content:center; padding:1rem; backdrop-filter:blur(4px); }
+    .modal-overlay.active { display:flex; }
+    .modal-box { animation: modalIn .25s ease-out both; }
+
+    .divider { width:60px; height:3px; background:linear-gradient(90deg,#c9a84c,#f0d080); border-radius:99px; }
+
+    .hero-bg {
+      background: linear-gradient(135deg, #1a1208 0%, #3b2409 50%, #5c3d1e 100%);
+    }
+    .tag-badge {
+      background: linear-gradient(135deg, #c9a84c, #f0d080);
+      color: #1a1208;
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar" class="fixed top-0 left-0 right-0 z-50 anim-nav transition-shadow duration-300" style="background:rgba(26,18,8,.95); backdrop-filter:blur(12px);">
+  <div class="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-9 h-9 rounded-full flex items-center justify-center text-lg" style="background:linear-gradient(135deg,#c9a84c,#f0d080)">🦆</div>
+      <div>
+        <div class="font-display text-white font-bold text-lg leading-none">Bebek Segar</div>
+        <div class="text-xs" style="color:#c9a84c">Pak Haji</div>
+      </div>
+    </div>
+    <ul class="hidden md:flex gap-7 text-sm font-medium" style="color:#e8d5b0">
+      <li><a href="#home" class="hover:text-yellow-300 transition-colors">Beranda</a></li>
+      <li><a href="#produk" class="hover:text-yellow-300 transition-colors">Produk</a></li>
+      <li><a href="#keunggulan" class="hover:text-yellow-300 transition-colors">Keunggulan</a></li>
+      <li><a href="#kontak" class="hover:text-yellow-300 transition-colors">Kontak</a></li>
+    </ul>
+    <button onclick="bukaModalLengkap()" class="hidden md:block gold-btn text-sm font-bold px-5 py-2.5 rounded-full" style="color:#1a1208">
+      🛒 Pesan Sekarang
+    </button>
+    <button onclick="toggleMenu()" class="md:hidden text-white">
+      <svg id="iconOpen" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      <svg id="iconClose" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" class="hidden"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+  </div>
+  <div id="mobileMenu" class="mobile-menu md:hidden" style="background:rgba(26,18,8,.98)">
+    <ul class="flex flex-col px-5 py-4 gap-4 text-sm font-medium" style="color:#e8d5b0">
+      <li><a href="#home" onclick="toggleMenu()" class="block">Beranda</a></li>
+      <li><a href="#produk" onclick="toggleMenu()" class="block">Produk</a></li>
+      <li><a href="#keunggulan" onclick="toggleMenu()" class="block">Keunggulan</a></li>
+      <li><a href="#kontak" onclick="toggleMenu()" class="block">Kontak</a></li>
+      <li><button onclick="bukaModalLengkap();toggleMenu()" class="gold-btn font-bold px-5 py-2.5 rounded-full w-fit text-sm" style="color:#1a1208">🛒 Pesan Sekarang</button></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="home" class="hero-bg min-h-screen flex items-center pt-20 overflow-hidden">
+  <div class="max-w-6xl mx-auto px-5 py-20 grid md:grid-cols-2 gap-12 items-center w-full">
+    <div>
+      <div class="anim-hero inline-flex items-center gap-2 border rounded-full px-4 py-1.5 text-xs font-semibold mb-6" style="border-color:#c9a84c;color:#c9a84c">
+        ✦ Terpercaya Sejak 2010 ✦
+      </div>
+      <h1 class="anim-hero-2 font-display text-white text-4xl md:text-5xl lg:text-6xl font-black leading-tight mb-5">
+        Bebek & Telur<br/><span style="color:#f0d080">Segar Pilihan</span><br/>Langsung dari Farm
+      </h1>
+      <p class="anim-hero-3 text-base leading-relaxed mb-8" style="color:#c4a882">
+        Bebek utuh, bebek potong, telur bebek segar, dan telur asin premium. Kualitas terjamin, harga bersaing, pengiriman cepat ke seluruh kota.
+      </p>
+      <div class="anim-hero-3 flex flex-wrap gap-4">
+        <button onclick="bukaModalLengkap()" class="gold-btn font-bold px-8 py-4 rounded-2xl text-base shadow-xl" style="color:#1a1208">
+          🛒 Pesan Sekarang
+        </button>
+        <a href="#produk" class="flex items-center gap-2 border-2 font-bold px-8 py-4 rounded-2xl text-base transition-colors hover:bg-white/10" style="border-color:#c9a84c;color:#c9a84c">
+          Lihat Produk ↓
+        </a>
+      </div>
+      <div class="anim-hero-3 flex gap-8 mt-10 pt-8 border-t" style="border-color:rgba(201,168,76,.25)">
+        <div><div class="font-display text-2xl font-black" style="color:#f0d080">1000+</div><div class="text-xs" style="color:#c4a882">Pelanggan Setia</div></div>
+        <div><div class="font-display text-2xl font-black" style="color:#f0d080">15+</div><div class="text-xs" style="color:#c4a882">Tahun Pengalaman</div></div>
+        <div><div class="font-display text-2xl font-black" style="color:#f0d080">4.9★</div><div class="text-xs" style="color:#c4a882">Rating Pelanggan</div></div>
+      </div>
+    </div>
+    <div class="flex justify-center">
+      <div class="relative anim-float">
+        <div class="w-72 h-72 md:w-96 md:h-96 rounded-full overflow-hidden border-4 shadow-2xl" style="border-color:#c9a84c">
+          <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=600&q=85&auto=format&fit=crop" alt="Bebek Segar" class="w-full h-full object-cover" />
+        </div>
+        <!-- Badge kiri -->
+        <div class="absolute -left-4 top-1/3 bg-white rounded-2xl px-4 py-3 shadow-xl">
+          <div class="text-xs font-semibold" style="color:#5c3d1e">Bebek Segar</div>
+          <div class="font-display font-bold text-sm" style="color:#c9a84c">100% Halal ✓</div>
+        </div>
+        <!-- Badge kanan -->
+        <div class="absolute -right-4 bottom-1/4 rounded-2xl px-4 py-3 shadow-xl" style="background:linear-gradient(135deg,#c9a84c,#f0d080)">
+          <div class="text-xs font-bold" style="color:#1a1208">🚚 Antar ke Rumah</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUK -->
+<section id="produk" class="py-24" style="background:#fdf6ec">
+  <div class="max-w-6xl mx-auto px-5">
+    <div class="scroll-reveal text-center mb-14">
+      <p class="text-sm font-semibold mb-2" style="color:#c9a84c">— Produk Unggulan —</p>
+      <h2 class="font-display text-3xl md:text-4xl font-black mb-3" style="color:#1a1208">Pilihan Produk <span style="color:#c9a84c">Terbaik</span> Kami</h2>
+      <div class="divider mx-auto mt-4"></div>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+      <!-- Bebek Utuh -->
+      <div class="scroll-reveal stagger-1 card-product bg-white rounded-3xl overflow-hidden shadow-lg border" style="border-color:#f0e8d0">
+        <div class="relative h-48 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1548550023-2bdb3c5beed7?w=400&q=80&auto=format&fit=crop" alt="Bebek Utuh" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
+          <div class="absolute top-3 left-3 tag-badge text-xs font-bold px-3 py-1 rounded-full">Terlaris</div>
+        </div>
+        <div class="p-5">
+          <h3 class="font-display font-bold text-lg mb-1" style="color:#1a1208">Bebek Utuh</h3>
+          <p class="text-xs leading-relaxed mb-4" style="color:#7a6040">Bebek segar utuh siap masak, bersih & sudah dicabut bulu. Berat rata-rata 1,5–2 kg/ekor.</p>
+          <div class="flex items-end justify-between mb-4">
+            <div>
+              <div class="text-xs" style="color:#9a8060">Mulai dari</div>
+              <div class="font-display font-black text-xl" style="color:#c9a84c" id="harga-bebek-utuh">Rp 75.000<span class="text-xs font-normal">/ekor</span></div>
+              <div id="harga-diskon-bebek-utuh" class="hidden text-xs line-through" style="color:#bbb">Rp 75.000/ekor</div>
+            </div>
+          </div>
+          <button onclick="bukaModal('Bebek Utuh', 75000, 'ekor')" class="gold-btn w-full py-2.5 rounded-xl font-bold text-sm" style="color:#1a1208">
+            🛒 Pesan
+          </button>
+        </div>
+      </div>
+
+      <!-- Bebek Potong -->
+      <div class="scroll-reveal stagger-2 card-product bg-white rounded-3xl overflow-hidden shadow-lg border" style="border-color:#f0e8d0">
+        <div class="relative h-48 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=400&q=80&auto=format&fit=crop" alt="Bebek Potong" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
+          <div class="absolute top-3 left-3 tag-badge text-xs font-bold px-3 py-1 rounded-full">Populer</div>
+        </div>
+        <div class="p-5">
+          <h3 class="font-display font-bold text-lg mb-1" style="color:#1a1208">Bebek Potong</h3>
+          <p class="text-xs leading-relaxed mb-4" style="color:#7a6040">Bebek segar dipotong sesuai kebutuhan. Tersedia per bagian: dada, paha, sayap, atau campuran.</p>
+          <div class="flex items-end justify-between mb-4">
+            <div>
+              <div class="text-xs" style="color:#9a8060">Mulai dari</div>
+              <div class="font-display font-black text-xl" style="color:#c9a84c" id="harga-bebek-potong">Rp 45.000<span class="text-xs font-normal">/kg</span></div>
+              <div id="harga-diskon-bebek-potong" class="hidden text-xs line-through" style="color:#bbb">Rp 45.000/kg</div>
+            </div>
+          </div>
+          <button onclick="bukaModal('Bebek Potong', 45000, 'kg')" class="gold-btn w-full py-2.5 rounded-xl font-bold text-sm" style="color:#1a1208">
+            🛒 Pesan
+          </button>
+        </div>
+      </div>
+
+      <!-- Telur Bebek -->
+      <div class="scroll-reveal stagger-3 card-product bg-white rounded-3xl overflow-hidden shadow-lg border" style="border-color:#f0e8d0">
+        <div class="relative h-48 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?w=400&q=80&auto=format&fit=crop" alt="Telur Bebek" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+            onerror="this.src='https://images.unsplash.com/photo-1506976785307-8732e854ad03?w=400&q=80&auto=format&fit=crop'" />
+          <div class="absolute top-3 left-3 tag-badge text-xs font-bold px-3 py-1 rounded-full">Segar</div>
+        </div>
+        <div class="p-5">
+          <h3 class="font-display font-bold text-lg mb-1" style="color:#1a1208">Telur Bebek</h3>
+          <p class="text-xs leading-relaxed mb-4" style="color:#7a6040">Telur bebek segar langsung dari peternakan. Kuning telur besar, kaya nutrisi, cocok untuk masak apa saja.</p>
+          <div class="flex items-end justify-between mb-4">
+            <div>
+              <div class="text-xs" style="color:#9a8060">Mulai dari</div>
+              <div class="font-display font-black text-xl" style="color:#c9a84c" id="harga-telur-bebek">Rp 3.500<span class="text-xs font-normal">/butir</span></div>
+              <div id="harga-diskon-telur-bebek" class="hidden text-xs line-through" style="color:#bbb">Rp 3.500/butir</div>
+            </div>
+          </div>
+          <button onclick="bukaModal('Telur Bebek', 3500, 'butir')" class="gold-btn w-full py-2.5 rounded-xl font-bold text-sm" style="color:#1a1208">
+            🛒 Pesan
+          </button>
+        </div>
+      </div>
+
+      <!-- Telur Asin -->
+      <div class="scroll-reveal stagger-4 card-product bg-white rounded-3xl overflow-hidden shadow-lg border" style="border-color:#f0e8d0">
+        <div class="relative h-48 overflow-hidden">
+          <img src="https://images.unsplash.com/photo-1506976785307-8732e854ad03?w=400&q=80&auto=format&fit=crop" alt="Telur Asin" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110" />
+          <div class="absolute top-3 left-3 tag-badge text-xs font-bold px-3 py-1 rounded-full">Premium</div>
+        </div>
+        <div class="p-5">
+          <h3 class="font-display font-bold text-lg mb-1" style="color:#1a1208">Telur Asin</h3>
+          <p class="text-xs leading-relaxed mb-4" style="color:#7a6040">Telur asin premium proses tradisional, kuning berminyak, rasa gurih sempurna. Tersedia matang & mentah.</p>
+          <div class="flex items-end justify-between mb-4">
+            <div>
+              <div class="text-xs" style="color:#9a8060">Mulai dari</div>
+              <div class="font-display font-black text-xl" style="color:#c9a84c" id="harga-telur-asin">Rp 5.000<span class="text-xs font-normal">/butir</span></div>
+              <div id="harga-diskon-telur-asin" class="hidden text-xs line-through" style="color:#bbb">Rp 5.000/butir</div>
+            </div>
+          </div>
+          <button onclick="bukaModal('Telur Asin', 5000, 'butir')" class="gold-btn w-full py-2.5 rounded-xl font-bold text-sm" style="color:#1a1208">
+            🛒 Pesan
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PROMO BANNER -->
+<section id="promo" class="py-16" style="background:linear-gradient(135deg,#1a1208,#3b2409)">
+  <div class="max-w-4xl mx-auto px-5">
+    <div class="scroll-reveal rounded-3xl p-8 md:p-12 text-center relative overflow-hidden border" style="border-color:rgba(201,168,76,.3)">
+      <div class="absolute inset-0 opacity-5 text-8xl flex items-center justify-center pointer-events-none select-none">🥚🦆🥚🦆</div>
+      <div class="relative z-10">
+        <div class="inline-block tag-badge text-xs font-black px-4 py-1.5 rounded-full mb-5">⚡ PROMO SPESIAL</div>
+        <h2 id="promoTitle" class="font-display text-4xl md:text-6xl font-black mb-3" style="color:#f0d080">DISKON 15%!</h2>
+        <p class="mb-2 font-semibold" style="color:#e8d5b0">Untuk semua produk bebek & telur</p>
+        <p class="text-sm mb-8" style="color:#c4a882">Berlaku untuk pembelian min. 5 kg / 30 butir. Hubungi kami untuk info lebih lanjut.</p>
+        <button id="btnKlaim" onclick="klaimPromo()" class="gold-btn font-black px-10 py-4 rounded-2xl text-lg shadow-2xl" style="color:#1a1208">
+          🎁 Klaim Promo Sekarang
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KEUNGGULAN -->
+<section id="keunggulan" class="py-24" style="background:#fdf6ec">
+  <div class="max-w-6xl mx-auto px-5">
+    <div class="scroll-reveal text-center mb-14">
+      <p class="text-sm font-semibold mb-2" style="color:#c9a84c">— Mengapa Memilih Kami —</p>
+      <h2 class="font-display text-3xl md:text-4xl font-black" style="color:#1a1208">Keunggulan <span style="color:#c9a84c">Bebek Segar Pak Haji</span></h2>
+      <div class="divider mx-auto mt-4"></div>
+    </div>
+    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="scroll-reveal stagger-1 text-center p-6 rounded-3xl border" style="background:#fff;border-color:#f0e8d0">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4" style="background:linear-gradient(135deg,#c9a84c22,#f0d08033)">🌿</div>
+        <h4 class="font-display font-bold mb-2" style="color:#1a1208">100% Segar</h4>
+        <p class="text-xs leading-relaxed" style="color:#7a6040">Langsung dari peternakan sendiri, dipotong & dikemas hari yang sama.</p>
+      </div>
+      <div class="scroll-reveal stagger-2 text-center p-6 rounded-3xl border" style="background:#fff;border-color:#f0e8d0">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4" style="background:linear-gradient(135deg,#c9a84c22,#f0d08033)">✅</div>
+        <h4 class="font-display font-bold mb-2" style="color:#1a1208">Halal Certified</h4>
+        <p class="text-xs leading-relaxed" style="color:#7a6040">Proses pemotongan sesuai syariat Islam, bersertifikat halal resmi.</p>
+      </div>
+      <div class="scroll-reveal stagger-3 text-center p-6 rounded-3xl border" style="background:#fff;border-color:#f0e8d0">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4" style="background:linear-gradient(135deg,#c9a84c22,#f0d08033)">🚚</div>
+        <h4 class="font-display font-bold mb-2" style="color:#1a1208">Antar ke Rumah</h4>
+        <p class="text-xs leading-relaxed" style="color:#7a6040">Layanan antar gratis area kota, dikemas dengan box pendingin agar tetap segar.</p>
+      </div>
+      <div class="scroll-reveal stagger-4 text-center p-6 rounded-3xl border" style="background:#fff;border-color:#f0e8d0">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4" style="background:linear-gradient(135deg,#c9a84c22,#f0d08033)">💰</div>
+        <h4 class="font-display font-bold mb-2" style="color:#1a1208">Harga Grosir</h4>
+        <p class="text-xs leading-relaxed" style="color:#7a6040">Harga spesial untuk pembelian partai besar. Cocok untuk warung & restoran.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KONTAK -->
+<section id="kontak" class="py-24" style="background:#f5ede0">
+  <div class="max-w-6xl mx-auto px-5">
+    <div class="scroll-reveal text-center mb-14">
+      <p class="text-sm font-semibold mb-2" style="color:#c9a84c">— Hubungi Kami —</p>
+      <h2 class="font-display text-3xl md:text-4xl font-black" style="color:#1a1208">Siap <span style="color:#c9a84c">Melayani</span> Anda</h2>
+      <div class="divider mx-auto mt-4"></div>
+    </div>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div class="scroll-reveal stagger-1 bg-white rounded-3xl p-7 shadow-lg text-center border" style="border-color:#f0e8d0">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4" style="background:linear-gradient(135deg,#25d36622,#25d36633)">💬</div>
+        <h3 class="font-display font-bold mb-2" style="color:#1a1208">WhatsApp</h3>
+        <p class="text-xs mb-5" style="color:#7a6040">Chat langsung untuk pemesanan & info harga terbaru</p>
+        <a href="https://wa.me/6281234567890?text=Halo%20Pak%20Haji,%20saya%20mau%20pesan%20produk%20bebek" target="_blank"
+           class="inline-flex items-center gap-2 font-bold px-6 py-3 rounded-xl text-sm text-white shadow-lg transition-transform hover:scale-105"
+           style="background:#25d366">💬 Chat Sekarang</a>
+      </div>
+      <div class="scroll-reveal stagger-2 bg-white rounded-3xl p-7 shadow-lg text-center border" style="border-color:#f0e8d0">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4" style="background:linear-gradient(135deg,#c9a84c22,#f0d08033)">📍</div>
+        <h3 class="font-display font-bold mb-2" style="color:#1a1208">Lokasi</h3>
+        <p class="text-xs mb-1" style="color:#7a6040">Jl. Peternakan Raya No. 12</p>
+        <p class="text-xs mb-5" style="color:#7a6040">Kec. Makmur, Kota Sejahtera</p>
+        <span class="inline-block text-xs font-semibold px-4 py-2 rounded-xl" style="background:#fdf6ec;color:#c9a84c">📍 Buka Setiap Hari</span>
+      </div>
+      <div class="scroll-reveal stagger-3 bg-white rounded-3xl p-7 shadow-lg text-center border" style="border-color:#f0e8d0">
+        <div class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mx-auto mb-4" style="background:linear-gradient(135deg,#c9a84c22,#f0d08033)">🕐</div>
+        <h3 class="font-display font-bold mb-2" style="color:#1a1208">Jam Operasional</h3>
+        <div class="text-xs space-y-1.5 mb-5" style="color:#7a6040">
+          <p><span class="font-semibold">Senin – Sabtu:</span> 06.00 – 17.00</p>
+          <p><span class="font-semibold">Minggu:</span> 06.00 – 12.00</p>
+          <p class="font-bold" style="color:#25d366">🟢 Buka Hari Ini</p>
+        </div>
+        <span class="inline-block text-xs font-semibold px-4 py-2 rounded-xl" style="background:#f0fdf4;color:#16a34a">Termasuk Hari Libur Nasional</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="background:#1a1208" class="py-12">
+  <div class="max-w-6xl mx-auto px-5">
+    <div class="grid md:grid-cols-3 gap-8 mb-8">
+      <div>
+        <div class="flex items-center gap-3 mb-4">
+          <div class="w-9 h-9 rounded-full flex items-center justify-center text-lg" style="background:linear-gradient(135deg,#c9a84c,#f0d080)">🦆</div>
+          <div>
+            <div class="font-display text-white font-bold text-lg leading-none">Bebek Segar</div>
+            <div class="text-xs" style="color:#c9a84c">Pak Haji</div>
+          </div>
+        </div>
+        <p class="text-xs leading-relaxed" style="color:#8a7060">Peternakan bebek terpercaya sejak 2010. Menyediakan bebek segar & telur berkualitas untuk kebutuhan rumah tangga hingga restoran.</p>
+      </div>
+      <div>
+        <h4 class="font-display font-bold mb-4 text-sm" style="color:#c9a84c">Produk Kami</h4>
+        <ul class="text-xs space-y-2" style="color:#8a7060">
+          <li class="hover:text-yellow-300 cursor-pointer transition-colors">• Bebek Utuh Segar</li>
+          <li class="hover:text-yellow-300 cursor-pointer transition-colors">• Bebek Potong per Kg</li>
+          <li class="hover:text-yellow-300 cursor-pointer transition-colors">• Telur Bebek Segar</li>
+          <li class="hover:text-yellow-300 cursor-pointer transition-colors">• Telur Asin Premium</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="font-display font-bold mb-4 text-sm" style="color:#c9a84c">Ikuti Kami</h4>
+        <div class="flex gap-3 mb-4">
+          <a href="#" class="w-9 h-9 rounded-xl flex items-center justify-center text-sm transition-colors hover:opacity-80" style="background:#3b2409;color:#c9a84c">📸</a>
+          <a href="#" class="w-9 h-9 rounded-xl flex items-center justify-center text-sm transition-colors hover:opacity-80" style="background:#3b2409;color:#c9a84c">👥</a>
+          <a href="https://wa.me/6281234567890" target="_blank" class="w-9 h-9 rounded-xl flex items-center justify-center text-sm transition-colors hover:opacity-80" style="background:#3b2409;color:#c9a84c">💬</a>
+        </div>
+        <p class="text-xs" style="color:#8a7060">@bebeksegarPakHaji</p>
+      </div>
+    </div>
+    <div class="border-t pt-6 text-center text-xs" style="border-color:#3b2409;color:#5a4030">
+      © 2024 Bebek Segar Pak Haji. All rights reserved. 🦆
+    </div>
+  </div>
+</footer>
+
+<!-- FLOATING WA -->
+<a href="https://wa.me/6281234567890?text=Halo%20Pak%20Haji,%20saya%20mau%20pesan" target="_blank"
+   class="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-full shadow-2xl flex items-center justify-center text-2xl transition-transform hover:scale-110"
+   style="background:#25d366" title="Chat WhatsApp">💬</a>
+
+<!-- MODAL PEMESANAN -->
+<div id="modalPesan" class="modal-overlay" onclick="tutupModalLuar(event)">
+  <div class="modal-box bg-white rounded-3xl shadow-2xl w-full max-w-lg p-7 max-h-[92vh] overflow-y-auto">
+    <div class="flex items-start justify-between mb-6">
+      <div>
+        <h3 class="font-display font-black text-xl" style="color:#1a1208">Form Pemesanan</h3>
+        <p id="modalSubtitle" class="text-sm font-semibold mt-0.5" style="color:#c9a84c"></p>
+      </div>
+      <button onclick="tutupModal()" class="w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm shrink-0 ml-4 transition-colors hover:bg-gray-200" style="background:#f5f5f5;color:#666">✕</button>
+    </div>
+
+    <div id="badgePromoModal" class="hidden mb-5 text-sm font-bold px-4 py-2.5 rounded-xl flex items-center gap-2" style="background:#fefce8;border:1px solid #c9a84c;color:#92400e">
+      🎉 Promo 15% aktif! Harga sudah dipotong diskon.
+    </div>
+
+    <form id="formPesan" onsubmit="kirimPesanan(event)" class="flex flex-col gap-4">
+      <div>
+        <label class="block text-xs font-bold mb-1.5" style="color:#5c3d1e">Nama Lengkap *</label>
+        <input id="inputNama" type="text" required placeholder="Contoh: Budi Santoso"
+          class="w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors" style="border-color:#e8d5b0" onfocus="this.style.borderColor='#c9a84c'" onblur="this.style.borderColor='#e8d5b0'" />
+      </div>
+      <div>
+        <label class="block text-xs font-bold mb-1.5" style="color:#5c3d1e">No. WhatsApp *</label>
+        <input id="inputHp" type="tel" required placeholder="Contoh: 08123456789"
+          class="w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors" style="border-color:#e8d5b0" onfocus="this.style.borderColor='#c9a84c'" onblur="this.style.borderColor='#e8d5b0'" />
+      </div>
+      <div>
+        <label class="block text-xs font-bold mb-1.5" style="color:#5c3d1e">Alamat Lengkap *</label>
+        <textarea id="inputAlamat" rows="2" required placeholder="Jl. Contoh No. 1, RT/RW, Kelurahan, Kecamatan, Kota"
+          class="w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors resize-none" style="border-color:#e8d5b0" onfocus="this.style.borderColor='#c9a84c'" onblur="this.style.borderColor='#e8d5b0'"></textarea>
+      </div>
+      <div id="wrapperPilihProduk">
+        <label class="block text-xs font-bold mb-1.5" style="color:#5c3d1e">Pilih Produk *</label>
+        <select id="inputProdukPilih" onchange="gantiProdukDariSelect()" required
+          class="w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors bg-white" style="border-color:#e8d5b0" onfocus="this.style.borderColor='#c9a84c'" onblur="this.style.borderColor='#e8d5b0'">
+          <option value="">-- Pilih Produk --</option>
+          <option value="Bebek Utuh|75000|ekor">🦆 Bebek Utuh — Rp 75.000/ekor</option>
+          <option value="Bebek Potong|45000|kg">🔪 Bebek Potong — Rp 45.000/kg</option>
+          <option value="Telur Bebek|3500|butir">🥚 Telur Bebek — Rp 3.500/butir</option>
+          <option value="Telur Asin|5000|butir">🧂 Telur Asin — Rp 5.000/butir</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs font-bold mb-1.5" style="color:#5c3d1e">Jumlah *</label>
+        <div class="flex items-center gap-3">
+          <button type="button" onclick="ubahJumlah(-1)" class="w-10 h-10 rounded-xl font-black text-lg transition-colors hover:opacity-80" style="background:#fdf6ec;color:#5c3d1e">−</button>
+          <input id="inputJumlah" type="number" value="1" min="1" max="999" readonly
+            class="w-20 text-center border-2 rounded-xl py-2.5 font-bold" style="border-color:#e8d5b0;color:#1a1208" />
+          <button type="button" onclick="ubahJumlah(1)" class="w-10 h-10 rounded-xl font-black text-lg transition-colors hover:opacity-80" style="background:#fdf6ec;color:#5c3d1e">+</button>
+          <span id="satuanLabel" class="text-sm" style="color:#7a6040">ekor</span>
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs font-bold mb-1.5" style="color:#5c3d1e">Catatan (opsional)</label>
+        <textarea id="inputCatatan" rows="2" placeholder="Contoh: potong 4 bagian, tanpa kepala, dll"
+          class="w-full border-2 rounded-xl px-4 py-3 text-sm focus:outline-none transition-colors resize-none" style="border-color:#e8d5b0" onfocus="this.style.borderColor='#c9a84c'" onblur="this.style.borderColor='#e8d5b0'"></textarea>
+      </div>
+      <div class="rounded-2xl p-4" style="background:#fdf6ec;border:1px solid #e8d5b0">
+        <div class="flex justify-between items-center">
+          <span class="text-sm font-semibold" style="color:#5c3d1e">Total Pembayaran</span>
+          <div class="text-right">
+            <div id="hargaAsliModal" class="hidden text-xs line-through" style="color:#bbb"></div>
+            <div id="totalHarga" class="font-display font-black text-xl" style="color:#c9a84c">Rp 0</div>
+          </div>
+        </div>
+        <div id="infoDiskonModal" class="hidden mt-1 text-xs font-semibold" style="color:#16a34a">✅ Diskon 15% sudah diterapkan</div>
+      </div>
+      <button type="submit" id="btnKirim" class="gold-btn w-full py-4 rounded-2xl font-black text-base shadow-xl" style="color:#1a1208">
+        🛒 Konfirmasi Pesanan
+      </button>
+      <p class="text-xs text-center" style="color:#9a8060">Setelah konfirmasi, kami akan menghubungi kamu via WhatsApp</p>
+    </form>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast" class="fixed top-20 left-1/2 -translate-x-1/2 z-[300] hidden" style="min-width:280px">
+  <div id="toastBox" class="px-6 py-3 rounded-2xl shadow-2xl font-bold text-sm text-white text-center"></div>
+</div>
+
+<script>
+  const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyEHulU02nVMAUTujKdn5zg-DoRpQOslbpRLPdqPYMe-prlJrFYhs2cCQTp49hCucIR/exec';
+
+  let produkAktif = '';
+  let hargaAktif = 0;
+  let satuanAktif = 'ekor';
+  let promoAktif = false;
+  let modeLengkap = false;
+
+  // ── PROMO ──────────────────────────────────────────────
+  function klaimPromo() {
+    if (promoAktif) return;
+    promoAktif = true;
+
+    const produkData = [
+      { id: 'bebek-utuh',   harga: 75000, satuan: 'ekor' },
+      { id: 'bebek-potong', harga: 45000, satuan: 'kg'   },
+      { id: 'telur-bebek',  harga: 3500,  satuan: 'butir' },
+      { id: 'telur-asin',   harga: 5000,  satuan: 'butir' },
+    ];
+
+    produkData.forEach(p => {
+      const diskon = Math.round(p.harga * 0.85);
+      const elHarga = document.getElementById('harga-' + p.id);
+      const elCoret = document.getElementById('harga-diskon-' + p.id);
+      if (elHarga) {
+        elCoret.textContent = elHarga.textContent;
+        elCoret.classList.remove('hidden');
+        elHarga.innerHTML = 'Rp ' + diskon.toLocaleString('id-ID') + '<span class="text-xs font-normal">/' + p.satuan + '</span>';
+        elHarga.style.color = '#16a34a';
+      }
+    });
+
+    const btn = document.getElementById('btnKlaim');
+    btn.textContent = '✅ Promo Aktif!';
+    btn.style.background = '#16a34a';
+    btn.style.color = '#fff';
+    btn.disabled = true;
+
+    document.getElementById('promoTitle').textContent = 'PROMO AKTIF ✅';
+
+    tampilToast('Promo 15% berhasil diklaim! Semua harga sudah dipotong.');
+  }
+
+  // ── MODAL DARI CARD PRODUK ─────────────────────────────
+  function bukaModal(nama, hargaOriginal, satuan) {
+    modeLengkap = false;
+    produkAktif = nama;
+    satuanAktif = satuan;
+    hargaAktif = promoAktif ? Math.round(hargaOriginal * 0.85) : hargaOriginal;
+
+    document.getElementById('modalSubtitle').textContent = '📦 ' + nama;
+    document.getElementById('wrapperPilihProduk').style.display = 'none';
+    document.getElementById('inputProdukPilih').required = false;
+    document.getElementById('satuanLabel').textContent = satuan;
+    resetForm();
+    updateTotal();
+    document.getElementById('modalPesan').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  // ── MODAL DARI "PESAN SEKARANG" ────────────────────────
+  function bukaModalLengkap() {
+    modeLengkap = true;
+    produkAktif = '';
+    hargaAktif = 0;
+    satuanAktif = 'ekor';
+
+    document.getElementById('modalSubtitle').textContent = 'Pilih produk & isi data kamu';
+    document.getElementById('wrapperPilihProduk').style.display = 'block';
+    document.getElementById('inputProdukPilih').required = true;
+    document.getElementById('inputProdukPilih').value = '';
+    document.getElementById('satuanLabel').textContent = '';
+    resetForm();
+    updateTotal();
+    document.getElementById('modalPesan').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function gantiProdukDariSelect() {
+    const val = document.getElementById('inputProdukPilih').value;
+    if (!val) { produkAktif = ''; hargaAktif = 0; updateTotal(); return; }
+    const [nama, hargaStr, satuan] = val.split('|');
+    produkAktif = nama;
+    satuanAktif = satuan;
+    const hargaOriginal = parseInt(hargaStr);
+    hargaAktif = promoAktif ? Math.round(hargaOriginal * 0.85) : hargaOriginal;
+    document.getElementById('modalSubtitle').textContent = '📦 ' + nama;
+    document.getElementById('satuanLabel').textContent = satuan;
+    updateTotal();
+  }
+
+  function resetForm() {
+    document.getElementById('inputJumlah').value = 1;
+    ['inputNama','inputHp','inputAlamat','inputCatatan'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    const badge = document.getElementById('badgePromoModal');
+    badge.classList.toggle('hidden', !promoAktif);
+    badge.classList.toggle('flex', promoAktif);
+  }
+
+  function tutupModal() {
+    document.getElementById('modalPesan').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function tutupModalLuar(e) {
+    if (e.target === document.getElementById('modalPesan')) tutupModal();
+  }
+
+  function ubahJumlah(delta) {
+    const el = document.getElementById('inputJumlah');
+    el.value = Math.min(999, Math.max(1, parseInt(el.value) + delta));
+    updateTotal();
+  }
+
+  function updateTotal() {
+    const jumlah = parseInt(document.getElementById('inputJumlah').value) || 1;
+    const total = hargaAktif * jumlah;
+    document.getElementById('totalHarga').textContent = 'Rp ' + total.toLocaleString('id-ID');
+
+    if (promoAktif && hargaAktif > 0) {
+      const asli = Math.round(hargaAktif / 0.85);
+      document.getElementById('hargaAsliModal').textContent = 'Rp ' + (asli * jumlah).toLocaleString('id-ID');
+      document.getElementById('hargaAsliModal').classList.remove('hidden');
+      document.getElementById('infoDiskonModal').classList.remove('hidden');
+    } else {
+      document.getElementById('hargaAsliModal').classList.add('hidden');
+      document.getElementById('infoDiskonModal').classList.add('hidden');
+    }
+  }
+
+  function tampilToast(pesan, sukses = true) {
+    const box = document.getElementById('toastBox');
+    box.textContent = (sukses ? '✅ ' : '❌ ') + pesan;
+    box.style.background = sukses ? '#16a34a' : '#dc2626';
+    document.getElementById('toast').classList.remove('hidden');
+    setTimeout(() => document.getElementById('toast').classList.add('hidden'), 4000);
+  }
+
+  async function kirimPesanan(e) {
+    e.preventDefault();
+    if (!produkAktif) { tampilToast('Pilih produk terlebih dahulu!', false); return; }
+
+    const btn = document.getElementById('btnKirim');
+    const nama    = document.getElementById('inputNama').value.trim();
+    const noHp    = document.getElementById('inputHp').value.trim();
+    const alamat  = document.getElementById('inputAlamat').value.trim();
+    const jumlah  = parseInt(document.getElementById('inputJumlah').value);
+    const catatan = document.getElementById('inputCatatan').value.trim();
+    const total   = hargaAktif * jumlah;
+
+    btn.textContent = '⏳ Mengirim...';
+    btn.disabled = true;
+
+    const payload = { nama, noHp, alamat, produk: produkAktif, satuan: satuanAktif, harga: hargaAktif, jumlah, total, catatan, promo: promoAktif ? 'Diskon 15%' : '-' };
+
+    try {
+      const res = await fetch(APPS_SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) });
+      const data = await res.json();
+      if (data.success) {
+        tutupModal();
+        tampilToast('Pesanan berhasil dicatat! Kami akan segera menghubungi kamu.');
+        setTimeout(() => {
+          const msg = `Halo Pak Haji, saya *${nama}*\nMau pesan: *${produkAktif}* — ${jumlah} ${satuanAktif}\nAlamat: ${alamat}\nTotal: Rp ${total.toLocaleString('id-ID')}${promoAktif ? ' (diskon 15%)' : ''}\n${catatan ? 'Catatan: ' + catatan : ''}`;
+          window.open('https://wa.me/6281234567890?text=' + encodeURIComponent(msg), '_blank');
+        }, 1500);
+      } else {
+        tampilToast('Gagal mencatat pesanan. Coba lagi.', false);
+      }
+    } catch {
+      tampilToast('Koneksi gagal. Pastikan URL Apps Script sudah benar.', false);
+    }
+
+    btn.textContent = '🛒 Konfirmasi Pesanan';
+    btn.disabled = false;
+  }
+
+  // Navbar scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('navbar-scrolled', window.scrollY > 20);
+  });
+
+  function toggleMenu() {
+    document.getElementById('mobileMenu').classList.toggle('open');
+    document.getElementById('iconOpen').classList.toggle('hidden');
+    document.getElementById('iconClose').classList.toggle('hidden');
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(
+    entries => entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }),
+    { threshold: 0.1 }
+  );
+  document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
